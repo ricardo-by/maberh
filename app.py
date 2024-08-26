@@ -5,13 +5,13 @@ from surprise.model_selection import train_test_split
 from surprise import accuracy
 
 # Cargar el dataset desde el mismo directorio
-df = pd.read_excel('mi_dataset.xlsx')
+df = pd.read_excel('EJVDIP.xlsx')
 
 # Preprocesamiento: Separar cursos individuales y entrenar modelo SVD
 data = []
 for index, row in df.iterrows():
     cursos_individuales = eval(row['Cursos'])  # Convertir la cadena de cursos a lista
-    for curso en cursos_individuales:
+    for curso in cursos_individuales:  # <== Aquí está la corrección
         data.append((row['Ejecutivo de Venta'], curso, row['VolumenVentas']))
 
 df_cursos = pd.DataFrame(data, columns=['ejecutivo', 'curso', 'ventas'])
@@ -48,7 +48,7 @@ def recomendar_cursos_por_rendimiento(ejecutivo_id, top_n=3):
     cursos_recomendables = cursos_tomados_grupo - cursos_tomados_ejecutivo
 
     recomendaciones = []
-    for curso en cursos_recomendables:
+    for curso in cursos_recomendables:
         pred = algo.predict(ejecutivo_id, curso)
         recomendaciones.append((curso, pred.est))
     
@@ -79,7 +79,7 @@ if ejecutivo_id:
     recomendaciones = recomendar_cursos_por_rendimiento(ejecutivo_id)
     
     st.write("### Cursos Recomendados")
-    for curso, score en recomendaciones:
+    for curso, score in recomendaciones:
         st.write(f"**Curso**: {curso}, **Score**: {score:.2f}")
     
     # Explicación de la recomendación
